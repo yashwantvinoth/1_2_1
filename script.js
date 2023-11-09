@@ -16,13 +16,14 @@ function getCookie(cname) {
 
 function timer(action) {
     if (action == 'start') {
-        timer = setTimeout(timer(increment), 1000);
+        let count = 0;
+        const timer = setInterval(function() {
+            document.cookie = "timeTaken=" + (parseInt(getCookie('timeTaken'))+1).toString();
+        }, 1000);
+    } else if (action == 'stop') {
+        clearInterval(timer);
+    } else if (action = 'reset') {
         document.cookie = 'timeTaken=0'
-    } else if (action == 'increment') {
-        document.cookie = "timeTaken=" + (getCookie('timeTaken')+1).toString();
-        timer = setTimeout(timer(increment), 1000);
-    } else if (action == 'end') {
-        clearTimeout(timer);
     }
 }
 
@@ -170,15 +171,17 @@ function checkEquation() {
             if (ogEquation == getCookie('secretEquation')) {
                 document.getElementById('playAgain').style.display="inline";
                 document.getElementById('winLose').textContent = "You Won!";
+                timer('stop');
             } else if (getCookie('row') == 5) {
                 document.getElementById('playAgain').style.display="inline";
                 document.getElementById('winLose').textContent = "You Lost :(";
+                timer('stop');
             } else {
                 document.cookie = "row=" + (parseInt(getCookie('row')) + 1);
                 document.cookie = "box=1";
             }
         } else if (equationCheck == 'bad') {
-            alert('invalid equation');
+            document.getElementById('invalid').style.display="inline";
             for (i = 1; i < 7; i++) {
                 document.getElementById('text' + getCookie('row') + '-' + i).textContent = "";
             }
@@ -206,13 +209,16 @@ function charDelete() {
 }
 
 
+
 function gameLoad(){
     document.cookie = "row=1";
     document.cookie = "box=1";
     document.cookie = "secretEquation=" + createEquation();
     document.getElementById("playAgain").style.display="none";
     document.getElementById("invalid").style.display="none";
-    timer(start);
+    document.getElementById("leaderBoard").style.display = "none";
+    document.cookie = ('timeTaken=0');
+    timer('start');
 }
 
 function information(){
@@ -220,23 +226,38 @@ function information(){
     document.getElementById("instructions").style.display = "none";
     document.getElementById("invalid").style.display="none";
     document.getElementById("playAgain").style.display="none";
+    document.getElementById("leaderBoard").style.display = "none";
 }
 function informationDisplay(){
     document.getElementById("onLoad").style.display="block";
     document.getElementById("instructions").style.display="inline";
     document.getElementById("playAgain").style.display="none";
     document.getElementById("invalid").style.display="none";
+    document.getElementById("leaderBoard").style.display = "none";
+}
+function leaderBoardDisplay(){
+    document.getElementById("onLoad").style.display="none";
+    document.getElementById("instructions").style.display = "none";
+    document.getElementById("invalid").style.display="none";
+    document.getElementById("playAgain").style.display="none";
+    document.getElementById("leaderBoard").style.display = "inline";
+}
+
+function resetLeaderboard(){
+    
 }
 
 function playMore(){
     window.location.reload();
     addToLeaderBoard();
 }
+
 function playAgainDisplay(){
     document.getElementById("playAgain").style.display="inline";
     document.getElementById("invalid").style.display="none";
     document.getElementById("onLoad").style.display="none";
     document.getElementById("instructions").style.display = "none";
+    document.getElementById("leaderBoard").style.display="none";
 }
 
 function addToLeaderBoard() {
@@ -245,9 +266,8 @@ function addToLeaderBoard() {
         if (getCookie('lb_name_' + i.toString()) == '') {
             document.cookie = "lb_name_" + i.toString() + "=" + document.getElementById('nameForLeaderboard').value;
             document.cookie = "lb_attempt_" + i.toString() + '=' + getCookie('row');
-            timer('end');
-            document.cookie = "lb_time_" + i.toString() + '=' + getCookie('timeTaken');
-            timer('start');
+            document.cookie = "lb_attempt" + i-toString() + '=' + getCookie('timeTaken');
+            timer('reset');
             break;
         } else {
             i++;
@@ -304,7 +324,7 @@ document.addEventListener('keydown', function(event) {
     }
     else if(event.keyCode == 187) {
         if (event.shiftKey) {
-            charTyped('+');
+            chatTyped('+');
         } else {
             charTyped('=');
         }

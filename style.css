@@ -15,6 +15,22 @@ text-align: center;
 margin-top:1%;
 margin-bottom: 2%;
 }
+.popUp2 {
+    display: flex;
+     margin-top: -6.25%;
+     height: 35px;
+     width:35px;
+     object-fit:fill;
+     border-style: solid;
+     margin-left: 78%;
+     border-color: black;
+     margin-bottom: 3.5%;
+     cursor:pointer;
+ }
+ 
+ .popUp2:hover{
+ opacity:0.75;
+ }
 
 .popUp {
    display: flex;
@@ -49,6 +65,17 @@ opacity:0.75;
  }
 
 #instructions {
+    background-color: rgb(253, 3, 3);
+    box-shadow: 1px 3px 4px 2px #888;
+    display:flex(column);
+    z-index: 50;   
+    position:absolute;
+    left: 25%;
+    top: 35%;
+    right:25%;
+    text-align: center; 
+}
+#leaderBoard {
     background-color: rgb(253, 3, 3);
     box-shadow: 1px 3px 4px 2px #888;
     display:flex(column);
@@ -176,5 +203,6 @@ justify-content: center;
 .name {
     font-size: 17px;
     margin-bottom: 2%;
+    text-align: center;
     padding: 1vw 5vw;
 }
