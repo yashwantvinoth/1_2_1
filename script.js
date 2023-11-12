@@ -14,19 +14,6 @@ function getCookie(cname) {
     return "";
 }
 
-function timer(action) {
-    if (action == 'start') {
-        let count = 0;
-        const timer = setInterval(function() {
-            document.cookie = "timeTaken=" + (parseInt(getCookie('timeTaken'))+1).toString();
-        }, 1000);
-    } else if (action == 'stop') {
-        clearInterval(timer);
-    } else if (action = 'reset') {
-        document.cookie = 'timeTaken=0'
-    }
-}
-
 function createEquation() {
     let equation;
     let equationCheck;
@@ -171,11 +158,9 @@ function checkEquation() {
             if (ogEquation == getCookie('secretEquation')) {
                 document.getElementById('playAgain').style.display="inline";
                 document.getElementById('winLose').textContent = "You Won!";
-                timer('stop');
             } else if (getCookie('row') == 5) {
                 document.getElementById('playAgain').style.display="inline";
                 document.getElementById('winLose').textContent = "You Lost :(";
-                timer('stop');
             } else {
                 document.cookie = "row=" + (parseInt(getCookie('row')) + 1);
                 document.cookie = "box=1";
@@ -217,8 +202,6 @@ function gameLoad(){
     document.getElementById("playAgain").style.display="none";
     document.getElementById("invalid").style.display="none";
     document.getElementById("leaderBoard").style.display = "none";
-    document.cookie = ('timeTaken=0');
-    timer('start');
 }
 
 function information(){
@@ -236,6 +219,25 @@ function informationDisplay(){
     document.getElementById("leaderBoard").style.display = "none";
 }
 function leaderBoardDisplay(){
+    let i = 0;
+    while (true) {
+        if (getCookie('lb_name_' + i.toString()) == '') {
+            break;
+        } else {
+            i++;
+        }
+    }
+    const lb = {};
+    let place = 1;
+    for (j = 1; j < 7; j++) {
+        for (k = 0; k < i; k++) {
+            if (getCookie('lb_attempt_' + k.toString()) == j.toString()) {
+                lb[place] = [getCookie('lb_name_' + k.toString()), getCookie('lb_attempt_' + k.toString()), getCookie('lb_datetime_' + k.toString())];
+                place++;
+            }
+        }
+    }
+    alert(lb);
     document.getElementById("onLoad").style.display="none";
     document.getElementById("instructions").style.display = "none";
     document.getElementById("invalid").style.display="none";
@@ -244,7 +246,18 @@ function leaderBoardDisplay(){
 }
 
 function resetLeaderboard(){
-    
+    alert("Leaderboard has been reset");
+    let i = 0;
+    while (true) {
+        if (getCookie('lb_name_' + i.toString()) == '') {
+            break;
+        } else {
+            document.cookie = "lb_name_" + i.toString() + "=";
+            document.cookie = "lb_attempt_" + i.toString() + '=';
+            document.cookie = "lb_datetime_" + i.toString() + '=';
+            i++;
+        }
+    }
 }
 
 function playMore(){
@@ -266,8 +279,8 @@ function addToLeaderBoard() {
         if (getCookie('lb_name_' + i.toString()) == '') {
             document.cookie = "lb_name_" + i.toString() + "=" + document.getElementById('nameForLeaderboard').value;
             document.cookie = "lb_attempt_" + i.toString() + '=' + getCookie('row');
-            document.cookie = "lb_attempt" + i-toString() + '=' + getCookie('timeTaken');
-            timer('reset');
+            const date = new Date();
+            document.cookie = "lb_datetime_" + i.toString() + '=' + date.getMonth().toString() + '/' + date.getDate().toString() + '/' + date.getFullYear().toString() + ' at ' + date.getHours().toString() + ':' + date.getMinutes().toString() + ':' + date.getSeconds().toString();
             break;
         } else {
             i++;
