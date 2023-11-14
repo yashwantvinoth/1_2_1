@@ -219,6 +219,7 @@ function informationDisplay(){
     document.getElementById("leaderBoard").style.display = "none";
 }
 function leaderBoardDisplay(){
+    var table = document.getElementById("leaderboard");
     let i = 0;
     while (true) {
         if (getCookie('lb_name_' + i.toString()) == '') {
@@ -227,17 +228,25 @@ function leaderBoardDisplay(){
             i++;
         }
     }
-    const lb = {};
+    for (j = 1; j < document.getElementById("leaderboard").rows.length; j++) {
+        document.getElementById("leaderboard").deleteRow(j);
+    }
     let place = 1;
     for (j = 1; j < 7; j++) {
         for (k = 0; k < i; k++) {
             if (getCookie('lb_attempt_' + k.toString()) == j.toString()) {
-                lb[place] = [getCookie('lb_name_' + k.toString()), getCookie('lb_attempt_' + k.toString()), getCookie('lb_datetime_' + k.toString())];
+                var row = table.insertRow(place);
+                var cell1 = row.insertCell(0);
+                var cell2 = row.insertCell(1);
+                var cell3 = row.insertCell(2);
+                cell1.innerHTML = getCookie('lb_name_' + k.toString());
+                cell2.innerHTML = getCookie('lb_attempt_' + k.toString());
+                cell3.innerHTML = getCookie('lb_datetime_' + k.toString());
+                row.style.height = 15;
                 place++;
             }
         }
     }
-    alert(lb);
     document.getElementById("onLoad").style.display="none";
     document.getElementById("instructions").style.display = "none";
     document.getElementById("invalid").style.display="none";
@@ -245,8 +254,7 @@ function leaderBoardDisplay(){
     document.getElementById("leaderBoard").style.display = "inline";
 }
 
-function resetLeaderboard(){
-    alert("Leaderboard has been reset");
+function resetLeaderboard() {
     let i = 0;
     while (true) {
         if (getCookie('lb_name_' + i.toString()) == '') {
@@ -258,6 +266,7 @@ function resetLeaderboard(){
             i++;
         }
     }
+    leaderBoardDisplay();
 }
 
 function playMore(){

@@ -206,3 +206,9 @@ justify-content: center;
     text-align: center;
     padding: 1vw 5vw;
 }
+
+.table{
+    overflow-y: auto;
+    height: 200px;
+
+}
